@@ -5,7 +5,7 @@ from reader import Reader
 from discriminator import Discriminator
 from generator import Generator
 
-REAL_LABEL = 0.9
+REAL_LABEL = 1.0
 LAMBDA = 10
 
 class CycleGAN:
@@ -79,7 +79,7 @@ class CycleGAN:
     W = W_a + W_b
 
     GP_a = self.gradien_penalty(self.D_Y, y, self.fake_y)
-    GP_b = self.disc_loss(self.D_X, x, self.fake_x)
+    GP_b = self.gradien_penalty(self.D_X, x, self.fake_x)
     GP = GP_a + GP_b
 
     # X -> Y
@@ -120,11 +120,12 @@ class CycleGAN:
       """ Adam optimizer with learning rate 0.0002 for the first 100k steps (~100 epochs)
           and a linearly decaying rate that goes to zero over the next 100k steps
       """
+      global_step = tf.Variable(0, trainable=False)
       beta1 = self.beta1
       tf.summary.scalar('learning_rate/{}'.format(name), self.learning_rate)
       learning_step = (
           tf.train.AdamOptimizer(self.learning_rate, beta1=beta1, name=name)
-                  .minimize(loss, var_list=variables)
+                  .minimize(loss, global_step=global_step, var_list=variables)
       )
       return learning_step
 
