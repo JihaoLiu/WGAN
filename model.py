@@ -103,14 +103,14 @@ class CycleGAN:
     tf.summary.scalar('lr/learning_rate', self.learning_rate)
 
     tf.summary.image('X/generated', utils.batch_convert2int(
-              tf.image.resize_images(self.G(x), (48, 160))))
+              tf.image.resize_images(self.G(x), (36, 136))))
     tf.summary.image('X/reconstruction', utils.batch_convert2int(
-              tf.image.resize_images(self.F(self.G(x)), (48, 160))))
+              tf.image.resize_images(self.F(self.G(x)), (36, 136))))
     tf.summary.image('Y/generated', utils.batch_convert2int(
-              tf.image.resize_images(self.F(y), (48, 160))
+              tf.image.resize_images(self.F(y), (36, 136))
     ))
     tf.summary.image('Y/reconstruction', utils.batch_convert2int(
-              tf.image.resize_images(self.G(self.F(y)), (48, 160))
+              tf.image.resize_images(self.G(self.F(y)), (36, 136))
     ))
 
     return G_loss, C_loss, fake_y, fake_x
